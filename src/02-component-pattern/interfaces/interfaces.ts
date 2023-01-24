@@ -1,9 +1,4 @@
-import { ReactElement } from "react"
 
-export interface ProductsProps {
-    product: Product,
-    children?:  ReactElement | ReactElement[]
-  }
   
 export interface Product {
     id: string,
