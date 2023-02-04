@@ -15,28 +15,17 @@ export  const useShoppingCart = () => {
 
         const productInCard: ProductInCard = oldShopingCard[product.id] || { ...product, count: 0 }
 
-        if( Math.max( productInCard.count + count, 0) > 0 ){
-          productInCard.count += count;
-            return{
-              ...oldShopingCard,
-              [product.id]: productInCard
-            }
-        }
 
-        //BORRAR EL PRODUCTOS 
-        const { [product.id]: toDelete, ...rest} = oldShopingCard;
+          if( count === 0 ){
+            const { [product.id]: toDelete, ...rest} = oldShopingCard;
             return rest
+          }
 
-      //   if( count === 0 ){
-      //     const { [product.id]: toDelete, ...rest} = oldShopingCard;
-      //     return rest
-      //   }
-
-      // /*agregar producto al carrito */
-      //   return{
-      //     ...oldShopingCard,
-      //     [ product.id ]: { ...product, count }
-      //   }
+        /*agregar producto al carrito */
+          return{
+            ...oldShopingCard,
+            [ product.id ]: { ...product, count }
+          }
       })
 
   }
