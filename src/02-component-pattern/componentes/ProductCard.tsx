@@ -1,6 +1,6 @@
 import { createContext, CSSProperties, ReactElement } from 'react';
 import { UseProduct } from '../hooks/useProduct';
-import { ProductContextProps, Product, onChangeArgs } from '../interfaces/interfaces';
+import { ProductContextProps, Product, onChangeArgs, InitialValue, ProductCardHandlers } from '../interfaces/interfaces';
 
 import styles from '../styles/styles.module.css';
 
@@ -8,47 +8,50 @@ import styles from '../styles/styles.module.css';
 
 export interface Props {
   product: Product,
-  children?:  ReactElement | ReactElement[],
+  // children?:  ReactElement | ReactElement[],
+  children: ( args: ProductCardHandlers ) => JSX.Element
   className?: string ,
   style?: CSSProperties,
   onChange?: ( args: onChangeArgs )=> void,
   value?: number,
+  initialValue?: InitialValue,
 }
 
 export const ProductContext = createContext({} as ProductContextProps );
 const { Provider } = ProductContext;
 
-export const ProductCard = ({ product, children, className, style, onChange, value }:Props) => {
+export const ProductCard = ({ product, children, className, style, onChange, value, initialValue }:Props) => {
 
-    const {counter, increaseBy} = UseProduct({ onChange, product, value }); 
+    const {counter, increaseBy, maxCount, isMaxReached, reset } = UseProduct({ onChange, product, value, initialValue }); 
 
 
   return (
     <Provider value={{
       counter,
       increaseBy,
-      product
+      product,
+      maxCount,
     }}>
       <div 
         className={`${ styles.productCard } ${ className }`}
         style={ style }>
 
-        {
-          children
+        { 
+        children({
+          count: counter,
+          isMaxReached,
+          maxCount,
+          product,
+          reset,
+          increaseBy
+
+        }) 
         }
 
-          {/* <ProductImg img={ product.img }/>
-
-          <ProductTitle title={ product.title }/>
-
-        <ProductButtons counter={counter} increaseBy={increaseBy}/> */}
       </div>
     </Provider>
   )
 }
 
 
-// ProductCard.Img = ProductImg;
-// ProductCard.Title = ProductTitle;
-// ProductCard.Buttons = ProductButtons;
 
